@@ -4,25 +4,30 @@
     <Header />
     <!-- 内容占位组件 -->
     <nuxt />
+    <!-- 页脚组件 -->
+    <Footer />
   </div>
 </template>
 
 <script>
 // 将头部组件引入
-import Header from "@/components/header"
+import Header from "@/components/header";
+// 将页脚组件引入
+import Footer from "@/components/footer";
 
 export default {
-// 注册组件
-components:{
-  Header
-}
-}
+  // 注册组件
+  components: {
+    Header,
+    Footer
+  }
+};
 </script>
 
 <style lang="less">
 html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
@@ -32,18 +37,21 @@ html {
   box-sizing: border-box;
 }
 
-*{
-  margin:0; 
-  padding:0;
+* {
+  margin: 0;
+  padding: 0;
 }
-ul, li, ol{
-  list-style:none;
+ul,
+li,
+ol {
+  list-style: none;
 }
-a{
-  text-decoration:none;
-  color:inherit;
+a {
+  text-decoration: none;
+  color: inherit;
 }
-em,i{
+em,
+i {
   font-style: normal;
 }
 </style>
