@@ -1,13 +1,21 @@
 <template>
   <div>
+    <!-- 头部组件 -->
+    <Header />
     <!-- 内容占位组件 -->
     <nuxt />
   </div>
 </template>
 
 <script>
-export default {
+// 将头部组件引入
+import Header from "@/components/header"
 
+export default {
+// 注册组件
+components:{
+  Header
+}
 }
 </script>
 
@@ -34,9 +42,6 @@ ul, li, ol{
 a{
   text-decoration:none;
   color:inherit;
-}
-a:hover{
-
 }
 em,i{
   font-style: normal;
