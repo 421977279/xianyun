@@ -36,7 +36,7 @@ export default {
         username: [
           // required为true指必填,message：错误的提示信息；trigger：触发时机
           { required: true, message: "请输入用户名/手机", trigger: "blur" },
-          { min: 2, max: 8, message: "长度在 2 到 8 个字符", trigger: "blur" }
+          { min: 2, max: 12, message: "长度在 2 到 12 个字符", trigger: "blur" }
         ],
         // 密码的校验规则
         password: [
@@ -49,7 +49,24 @@ export default {
   methods: {
     // 提交登录
     handleLoginSubmit() {
-      console.log(this.form);
+      // 判断element-ui表单验证是否通过
+      // element的表单都有一个validate这个方法
+      this.$refs.form.validate((valid) => {
+        // valid如果值是true代表验证通过
+        if (valid) {
+            // 请求登录接口
+            this.$axios({
+              url:"/accounts/login",
+              method:"POST",
+              data:this.form
+            }).then(res=>{
+              console.log(res);
+            })
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+      })
     }
   }
 };
