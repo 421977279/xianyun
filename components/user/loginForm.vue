@@ -60,11 +60,12 @@ export default {
               method:"POST",
               data:this.form
             }).then(res=>{
-              console.log(res);
+              const {data} = res;
+              // console.log(data);
+
+              // 调用mutations的方法
+              this.$store.commit("user/setUserInfo",data)
             })
-          } else {
-            console.log('error submit!!');
-            return false;
           }
       })
     }
