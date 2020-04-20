@@ -42,5 +42,24 @@ export const actions = {
       // 由于是在同一个模块下，可以省略user模块名
       store.commit("setUserInfo", data);
     })
-  }
+	},
+	
+	// 发送手机验证码
+	sendCaptcha(store,tel){
+		// 请求验证码接口
+		return this.$axios({
+			url: "/captchas",
+			method: "POST",
+			data: {
+				// 手机号码
+				tel
+			}
+		}).then(res=>{
+			// 接口主要调用成功了,都认为短信已经成功发送到用户手机上
+			const {code}=res.data;
+			// console.log(data);
+			return code;
+			// this.$message.success(`你的验证码为:`+code)
+		})
+	}
 }

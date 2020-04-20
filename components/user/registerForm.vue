@@ -84,18 +84,8 @@ export default {
         return;
       }
 
-      this.$axios({
-        url: "/captchas",
-        method: "POST",
-        data: {
-          tel: this.form.usernumber
-        }
-      }).then(res=>{
-        // 接口主要调用成功了,都认为短信已经成功发送到用户手机上
-        const {data}=res;
-        // console.log(data);
-
-        this.$message.success(`你的验证码为:`+data.code)
+      this.$store.dispatch("user/sendCaptcha",this.form.usernumber).then((res)=>{
+        this.$message.success(`你的验证码为:`+res)
       })
     },
 
