@@ -27,8 +27,8 @@ export default {
     return {
       // 表单数据
       form: {
-        username: "", //用户名
-        password: "" //密码
+        username: "13800138000", //用户名
+        password: "123456" //密码
       },
       // 表单规则,里面的输入必须和form统一
       rules: {
@@ -55,17 +55,20 @@ export default {
         // valid如果值是true代表验证通过
         if (valid) {
             // 请求登录接口
-            this.$axios({
-              url:"/accounts/login",
-              method:"POST",
-              data:this.form
-            }).then(res=>{
-              const {data} = res;
-              // console.log(data);
+            // this.$axios({
+            //   url:"/accounts/login",
+            //   method:"POST",
+            //   data:this.form
+            // }).then(res=>{
+            //   const {data} = res;
+            //   // console.log(data);
 
-              // 调用mutations的方法
-              this.$store.commit("user/setUserInfo",data)
-            })
+            //   // 调用mutations的方法，调用才存储数据
+            //   this.$store.commit("user/setUserInfo",data)
+            // })
+
+            // actions这个方法需要dispatch来调用，由于data的值需要在loginForm组件中获取，因此需要进行传参
+            this.$store.dispatch("user/login",this.form)
           }
       })
     }
