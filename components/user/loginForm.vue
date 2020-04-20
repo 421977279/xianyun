@@ -51,6 +51,8 @@ export default {
     handleLoginSubmit() {
       // 判断element-ui表单验证是否通过
       // element的表单都有一个validate这个方法
+
+      // 第一种写法：promise  .then
       this.$refs.form.validate(valid => {
         // valid如果值是true代表验证通过
         if (valid) {
@@ -77,6 +79,22 @@ export default {
           });
         }
       });
+
+      // 第二种写法 async await
+      // this.$refs.form.validate(async valid => {
+      //   // valid如果值是true代表验证通过
+      //   if (valid) {
+
+      //     // actions这个方法需要dispatch来调用，由于data的值需要在loginForm组件中获取，因此需要进行传参
+      //     this.$store.dispatch("user/login", this.form);
+
+      //     // 弹窗提示
+      //     this.$message.success("登录成功");
+
+      //     // 跳转到首页
+      //     this.$router.push("/");
+      //   }
+      // });
     }
   }
 };
