@@ -21,14 +21,14 @@ export const mutations = {
 export const actions = {
   // 声明一个函数，函数名可以随便起
   // 该函数有两个函数，第一个参数是Store,第二个参数是传入的参数
-  login(store,data) {
+  login(store, data) {
     // 打印出来的this里面包含了$axios这个属性
-    console.log(this);
-    console.log(store);
+    // console.log(this);
+    // console.log(store);
     // console.log(this.$store);  //undefined
 
     // 请求登录接口
-    this.$axios({
+    return this.$axios({
       url: "/accounts/login",
       method: "POST",
       data
@@ -39,8 +39,8 @@ export const actions = {
       // console.log(data);
 
       // 通过store.commit调用mutations的方法，调用才存储数据
-			// 由于是在同一个模块下，可以省略user模块名
-      store.commit("setUserInfo", data)
+      // 由于是在同一个模块下，可以省略user模块名
+      store.commit("setUserInfo", data);
     })
   }
 }
