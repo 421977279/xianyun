@@ -27,6 +27,7 @@
           @select="handleDepartSelect"
           class="el-autocomplete"
           v-model="form.departCity"
+          @blur="handleDepartBlur"
         ></el-autocomplete>
       </el-form-item>
 
@@ -37,11 +38,11 @@
           placeholder="请搜索到达城市"
           @select="handleDestSelect"
           class="el-autocomplete"
-					v-model="form.destCity"
+          v-model="form.destCity"
+					@blur="handleDestBlur"
         ></el-autocomplete>
       </el-form-item>
       <el-form-item label="出发时间">
-
         <!-- change 用户确认选择日期时触发 -->
         <el-date-picker type="date" placeholder="请选择日期" style="width: 100%;" @change="handleDate"></el-date-picker>
       </el-form-item>
@@ -63,15 +64,23 @@ export default {
         { icon: "iconfont icondancheng", name: "单程" },
         { icon: "iconfont iconshuangxiang", name: "往返" }
       ],
+
       currentTab: 0,
+
       // 表单的数据
       form: {
-				departCity: "", //出发城市的输入框的值
-				departCode: "", //出发城市的代码
-				destCity: "",   //到达城市的输入框的值
-				destCode: "",   //到达城市的代码
-				departDate: "",   //出发时间
-      }
+        depardtCity: "", //出发城市的输入框的值
+        departCode: "", //出发城市的代码
+        destCity: "", //到达城市的输入框的值
+        destCode: "", //到达城市的代码
+        departDate: "" //出发时间
+      },
+
+      // 出发城市的下拉列表数据
+			departCities: [], //(空数组)
+			
+			// 到达城市的下拉列表数据
+			destCities: [],
     };
   },
   methods: {
@@ -96,17 +105,28 @@ export default {
         }
       }).then(res => {
         const { data } = res.data;
-				// console.log(data);
-				
+        // console.log(data);
+
         // data的属性内没有value属性，需要转换下
-        const newData = data.map( v => {
-					v.value = v.name.replace("市","");
-					return v;
+        const newData = data.map(v => {
+          v.value = v.name.replace("市", "");
+          return v;
         });
 
-				//cb是要请求成功之后才调用，因为在这里才可以拿到数据
-				cb(newData);
+        // 将下拉列表数据保存到data空数组中，以便给blur事件失去焦点默认选中第一项时使用
+        this.departCities = newData;
+
+        //cb是要请求成功之后才调用，因为在这里才可以拿到数据
+        cb(newData);
       });
+    },
+
+    // 出发城市失去焦点时，默认选中第一项
+    handleDepartBlur() {
+      if (this.departCities.length > 0) {
+        this.form.departCity = this.departCities[0].value;
+        this.form.departCode = this.departCities[0].sort;
+      }
     },
 
     // 目标城市输入框获得焦点时触发
@@ -125,30 +145,41 @@ export default {
         }
       }).then(res => {
         const { data } = res.data;
-				// console.log(data);
-				
-        // data的属性内没有value属性，需要转换下
-        const newData = data.map( v => {
-					v.value = v.name.replace("市","");
-					return v;
-        });
+        // console.log(data);
 
-				//cb是要请求成功之后才调用，因为在这里才可以拿到数据
-				cb(newData);
+        // data的属性内没有value属性，需要转换下
+        const newData = data.map(v => {
+          v.value = v.name.replace("市", "");
+          return v;
+				});
+				
+				// 将下拉列表数据保存到data空数组中，以便给blur事件失去焦点默认选中第一项时使用
+        this.destCities = newData;
+
+        //cb是要请求成功之后才调用，因为在这里才可以拿到数据
+        cb(newData);
       });
+    },
+
+    // 目标城市失去焦点时，默认选中第一项
+    handleDestBlur() {
+      if (this.destCities.length > 0) {
+        this.form.destCity = this.destCities[0].value;
+        this.form.destCode = this.destCities[0].sort;
+      }
     },
 
     // 出发城市下拉选择时触发
     handleDepartSelect(item) {
-			// console.log(item);
-			// console.log(item.sort);
-			this.form.departCode = item.sort;
-		},
+      // console.log(item);
+      // console.log(item.sort);
+      this.form.departCode = item.sort;
+    },
 
     // 目标城市下拉选择时触发
     handleDestSelect(item) {
-			this.form.destCode = item.sort;
-		},
+      this.form.destCode = item.sort;
+    },
 
     // 确认选择日期时触发
     handleDate(value) {},
@@ -158,8 +189,8 @@ export default {
 
     // 提交表单是触发
     handleSubmit() {
-			console.log(this.form);
-		}
+      console.log(this.form);
+    }
   },
   mounted() {}
 };
