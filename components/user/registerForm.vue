@@ -1,7 +1,7 @@
 <template>
   <el-form :model="form" ref="form" :rules="rules" class="form">
-    <el-form-item class="form-item" prop="usernumber">
-      <el-input placeholder="用户名手机" v-model="form.usernumber"></el-input>
+    <el-form-item class="form-item" prop="username">
+      <el-input placeholder="用户名手机" v-model="form.username"></el-input>
     </el-form-item>
 
     <el-form-item class="form-item" prop="captcha">
@@ -12,8 +12,8 @@
       </el-input>
     </el-form-item>
 
-    <el-form-item class="form-item" prop="username">
-      <el-input placeholder="你的名字" v-model="form.username"></el-input>
+    <el-form-item class="form-item" prop="nickname">
+      <el-input placeholder="你的名字" v-model="form.nickname"></el-input>
     </el-form-item>
 
     <el-form-item class="form-item" prop="password">
@@ -49,20 +49,20 @@ export default {
     return {
       // 表单数据
       form: {
-        usernumber: "", //用户名手机
+        username: "", //用户名手机
         captcha: "", //验证码
-        username: "", //用户名
+        nickname: "", //用户名
         password: "", //密码
         checkPassword: "" //确认密码
       },
 
       // 表单规则
       rules: {
-        usernumber: [
+        username: [
           { required: true, message: "请输入用户名手机", trigger: "blur" }
         ],
         captcha: [{ required: true, message: "请输入验证码", trigger: "blur" }],
-        username: [
+        nickname: [
           { required: true, message: "请输入用户名", trigger: "blur" },
           { min: 2, max: 6, message: "长度在 2 到 6 个字符", trigger: "blur" }
         ],
@@ -76,22 +76,41 @@ export default {
     // 发送验证码
     handleSendCaptcha() {
       // 判断用户手机号是否为空，若为空，则停止执行代码
-      if (this.form.usernumber === "") {
-
+      if (this.form.username === "") {
         // validateField是指主动的触发表单某个属性字段的校验，并且会主动发生错误提示
-        this.$refs.form.validateField("usernumber")
+        this.$refs.form.validateField("username");
 
         return;
       }
 
-      this.$store.dispatch("user/sendCaptcha",this.form.usernumber).then((res)=>{
-        this.$message.success(`你的验证码为:`+res)
-      })
+      this.$store
+        .dispatch("user/sendCaptcha", this.form.username)
+        .then(res => {
+          this.$message.success(`你的验证码为:` + res);
+        });
     },
 
     // 注册
     handleRegSubmit() {
-      console.log(this.form);
+      // console.log(this.form);
+      // 请求注册的接口
+      // element表单的validate写法几乎都是一样的
+      this.$refs.form.validate(valid => {
+        if (valid) {
+
+          // 删除this.form的checkPassword属性
+          // 解构提取出某个属性，剩余的所有属性用other来表示
+          const {checkPassword,...other} = this.form;
+
+          // 调用actions下的register方法
+          this.$store.dispatch("user/register",other).then(res=>{
+            this.$message.success("恭喜你，注册成功");
+
+            // 跳转到首页
+            this.$router.push("/")
+          })
+        }
+      });
     }
   }
 };

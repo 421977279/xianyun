@@ -61,5 +61,24 @@ export const actions = {
 			return code;
 			// this.$message.success(`你的验证码为:`+code)
 		})
+	},
+
+	// 注册,注册接口调用成功后和登录的操作一样
+	register(store,data){
+		return this.$axios({
+			url:"/accounts/register",
+			method:"POST",
+			data
+		}).then(res=>{
+			const {
+        data
+      } = res;
+
+      // 通过store.commit调用mutations的方法，调用才存储数据
+      // 由于是在同一个模块下，可以省略user模块名
+			store.commit("setUserInfo", data);
+			
+			return data;
+		})
 	}
 }
