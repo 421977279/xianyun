@@ -1,7 +1,9 @@
 // 存放仓库该分类（user）下的数据
 // export const state ={}是固定写法
 export const state = {
-  userInfo: {}
+	// 采用接口返回的数据结构
+  userInfo: {
+	}
 }
 
 // 同步修改state中的数据
@@ -33,9 +35,8 @@ export const actions = {
       method: "POST",
       data
     }).then(res => {
-      const {
-        data
-      } = res;
+			// console.log(res);
+      const {data} = res;
       // console.log(data);
 
       // 通过store.commit调用mutations的方法，调用才存储数据
@@ -70,9 +71,7 @@ export const actions = {
 			method:"POST",
 			data
 		}).then(res=>{
-			const {
-        data
-      } = res;
+			const {data} = res;
 
       // 通过store.commit调用mutations的方法，调用才存储数据
       // 由于是在同一个模块下，可以省略user模块名
