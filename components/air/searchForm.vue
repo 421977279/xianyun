@@ -44,7 +44,13 @@
       </el-form-item>
       <el-form-item label="出发时间">
         <!-- change 用户确认选择日期时触发 -->
-        <el-date-picker type="date" placeholder="请选择日期" style="width: 100%;" @change="handleDate"></el-date-picker>
+        <el-date-picker 
+				type="date" 
+				placeholder="请选择日期" 
+				style="width: 100%;" 
+				@change="handleDate"
+				v-model="form.departDate"
+				value-format="yyyy-MM-dd"></el-date-picker>
       </el-form-item>
       <el-form-item label>
         <el-button style="width:100%;" type="primary" icon="el-icon-search" @click="handleSubmit">搜索</el-button>
