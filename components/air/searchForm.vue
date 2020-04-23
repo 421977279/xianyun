@@ -50,7 +50,8 @@
 				style="width: 100%;" 
 				@change="handleDate"
 				v-model="form.departDate"
-				value-format="yyyy-MM-dd"></el-date-picker>
+				value-format="yyyy-MM-dd"
+				:picker-options="pickerOptions"></el-date-picker>
       </el-form-item>
       <el-form-item label>
         <el-button style="width:100%;" type="primary" icon="el-icon-search" @click="handleSubmit">搜索</el-button>
@@ -87,6 +88,13 @@ export default {
 			
 			// 到达城市的下拉列表数据
 			destCities: [],
+
+			// 日期禁用选项
+			pickerOptions: {
+          disabledDate(time) {
+            return time.getTime() < Date.now() - 3600 * 1000 * 24;
+					}
+			}
     };
   },
   methods: {
