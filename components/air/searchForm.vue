@@ -14,11 +14,7 @@
     </el-row>
 
     <!-- 机票搜索的表单 -->
-    <el-form class="search-form-content" 
-		:rules="rules" 
-		ref="form" 
-		label-width="80px" 
-		:model="form">
+    <el-form class="search-form-content" :rules="rules" ref="form" label-width="80px" :model="form">
       <!-- 出发城市的输入框 -->
       <el-form-item label="出发城市" prop="departCity">
         <!-- fetch-suggestions：获取搜索建议，它的功能就是根据输入的关键字，发起请求，把请求的结果显示到下拉列表中-->
@@ -116,26 +112,10 @@ export default {
     };
   },
   methods: {
-    // tab切换时触发
-    handleSearchTab(item, index) {},
-
-    // 监听出发城市输入框的变化，一旦输入框发生变化就触发该事件
-    // value 是输入框选中的值，
-    // cb是回调函数(必须调用)，接收要展示的列表，接收的参数有个固定的格式
-    // 参数必须是一个数组，并且数组是由对象组成的，并且对象必须又value属性
-    queryDepartSearch(value, cb) {
-
-      // 如果value的值为空，就不需要请求
-      if (!value) {
-        return;
-			}
-			
-			// 对部分表单字段进行校验的方法——validateField
-			// 监听输入框有值的时候重新验证表单，可以消除掉红的报错信息
-      this.$refs.form.validateField("departCity");
-
+    // 封装请求城市的方法
+    getCities(value) {
       // 请求和value相关的城市
-      this.$axios({
+      return this.$axios({
         url: "/airs/city",
         params: {
           name: value
@@ -150,6 +130,33 @@ export default {
           return v;
         });
 
+        return newData;
+      });
+    },
+
+    // tab切换时触发
+    handleSearchTab(item, index) {},
+
+    // 监听出发城市输入框的变化，一旦输入框发生变化就触发该事件
+    // value 是输入框选中的值，
+    // cb是回调函数(必须调用)，接收要展示的列表，接收的参数有个固定的格式
+    // 参数必须是一个数组，并且数组是由对象组成的，并且对象必须又value属性
+    queryDepartSearch(value, cb) {
+      // 如果value的值为空，就不需要请求
+      if (!value) {
+        // 禁止值是空的时候显示下拉框
+        cb([]);
+        // 如果输入框的值是空的话，把之前的城市列表删除掉
+        this.departCities = [];
+        return;
+      }
+
+      // 对部分表单字段进行校验的方法——validateField
+      // 监听输入框有值的时候重新验证表单，可以消除掉红的报错信息
+      this.$refs.form.validateField("departCity");
+
+      // 根据value请求这个城市
+      this.getCities(value).then(newData => {
         // 将下拉列表数据保存到data空数组中，以便给blur事件失去焦点默认选中第一项时使用
         this.departCities = newData;
 
@@ -169,13 +176,12 @@ export default {
     // 目标城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
     queryDestSearch(value, cb) {
-
       // 如果value的值为空，就不需要请求
       if (!value) {
         return;
-			}
-			
-			// 对部分表单字段进行校验的方法——validateField
+      }
+
+      // 对部分表单字段进行校验的方法——validateField
       this.$refs.form.validateField("destCity");
 
       // 请求和value相关的城市
@@ -232,7 +238,11 @@ export default {
     handleSubmit() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          console.log(this.form);
+          // 路由跳转，path指定的路径，query属性
+          this.$router.push({
+            path: "air/flights",
+            query: this.form
+          });
         }
       });
     }
