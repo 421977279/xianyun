@@ -178,28 +178,18 @@ export default {
     queryDestSearch(value, cb) {
       // 如果value的值为空，就不需要请求
       if (!value) {
+        // 禁止值是空的时候显示下拉框
+        cb([]);
+        // 如果输入框的值是空的话，把之前的城市列表删除掉
+        this.destCities = [];
         return;
       }
 
       // 对部分表单字段进行校验的方法——validateField
       this.$refs.form.validateField("destCity");
 
-      // 请求和value相关的城市
-      this.$axios({
-        url: "/airs/city",
-        params: {
-          name: value
-        }
-      }).then(res => {
-        const { data } = res.data;
-        // console.log(data);
-
-        // data的属性内没有value属性，需要转换下
-        const newData = data.map(v => {
-          v.value = v.name.replace("市", "");
-          return v;
-        });
-
+      // 根据value请求这个城市
+      this.getCities(value).then(newData => {
         // 将下拉列表数据保存到data空数组中，以便给blur事件失去焦点默认选中第一项时使用
         this.destCities = newData;
 
@@ -232,7 +222,16 @@ export default {
     handleDate(value) {},
 
     // 触发和目标城市切换时触发
-    handleReverse() {},
+    handleReverse() {
+			const {departCity,departCode,destCity,destCode} = this.form;
+
+			// 交叉赋值
+			this.form.destCity = departCity;
+			this.form.destCode = departCode;
+
+			this.form.departCity = destCity;
+			this.form.departCode = destCode;
+		},
 
     // 提交表单是触发
     handleSubmit() {
