@@ -16,7 +16,7 @@
                         </el-col>
                         <!-- 相隔时间 -->
                         <el-col :span="8" class="flight-time">
-                            <span>2时20分</span>
+                            <span>{{rankTime}}</span>
                         </el-col>
                         <!-- 到达的信息 -->
                         <el-col :span="8" class="flight-airport">
@@ -76,6 +76,32 @@ export default {
             type: Object,
             // 默认是空数组
             default: {}
+        }
+    },
+
+    computed: {
+        // 相隔时间
+        rankTime(){
+            // 把到达时间减去出发时间
+            const arr = this.data.arr_time;  // 12.50
+            const dep = this.data.dep_time;  // 10.30
+
+            const end = arr.split(":")  //[12,50]字符串
+            const start = dep.split(":") //[10,30]字符串
+
+            // 如果到达时间的小时小于出发时间的小时，那么就表示到达时间是第二天
+            // 必须是飞行时间不超过24小时，现实生活不存在这个条件
+            if(end[0] <start[0] ){
+                end[0] = +end[0] +24;
+            }
+
+            // 相隔时间
+            const dis = end[0]*60 + +end[1] - start[0]*60 + +start[1];
+            // 小时
+            const hours = Math.floor(dis / 60);
+            // 分钟
+            const min = dis % 60;
+            return `${hours}小时${min}分`
         }
     }
 }
