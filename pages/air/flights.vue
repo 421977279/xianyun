@@ -11,7 +11,7 @@
 
         <!-- 航班列表 -->
         <div>
-          <FlightsItem v-for="(item,index) in flightsData.flights"
+          <FlightsItem v-for="(item,index) in dataList"
 					:key="index"
 					:data="item"/>
         </div>
@@ -51,6 +51,8 @@ export default {
     return {
 			// 总数据,里面包含了info,flights,total,options属性
 			flightsData:{},
+			// 这个属性专门用来存放切割出来的数组
+			dataList:[],
 			// 当前的页数
 			pageIndex:1,
 			// 当前显示的条数
@@ -71,16 +73,37 @@ export default {
 			// 总的数据,里面包含了info,flights,total,options属性
 			this.flightsData=res.data;
 			console.log(res.data);
+			// 请求完成后切割出第一页的数据
+			this.dataList=this.flightsData.flights.slice(0,this.pageSize)
+			// 将后台返回的总页数结果赋值给data命名的total中
+			this.total = this.flightsData.total
     })
 	},
 	methods: {
 		// 切换单页条数时触发的事件
-		handleSizeChange(){
-
+		handleSizeChange(val){
+				// console.log(`每页 ${val} 条`);
+				// 点击切换单页条数时，将val值赋值给data中的pageSize,即当前单页条数
+				this.pageSize = val;
+				// 一般条数发生了变化都会回到第一页
+				// 因此需要重新赋值pageIndex成为1
+				this.pageIndex = 1;
+				// 当单页条数发生变化时，需要重新切割数组
+				this.dataList=this.flightsData.flights.slice(
+				(this.pageIndex - 1) * this.pageSize,
+				this.pageIndex * this.pageSize
+			  )
 		},
 		// 切换页数时触发的事件
-		handleCurrentChange(){
-
+		handleCurrentChange(val){
+			// console.log(`当前页: ${val}`);
+			// 点击分页按钮时,将val赋值给data中的pageIndex,即当前页数
+			this.pageIndex = val;
+			// 重新切割数组
+			this.dataList=this.flightsData.flights.slice(
+				(this.pageIndex - 1) * this.pageSize,
+				this.pageIndex * this.pageSize
+			)
 		}
 	}
 };
