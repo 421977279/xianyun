@@ -4,7 +4,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <div></div>
+        <FlightsFilters />
 
         <!-- 航班头部布局 -->
         <FlightsListHead />
@@ -45,6 +45,8 @@
 import FlightsListHead from "@/components/air/flightsListHead.vue";
 // 机票航班列表
 import FlightsItem from "@/components/air/flightsItem.vue";
+// 条件过滤组件
+import FlightsFilters from "@/components/air/flightsFilters.vue";
 
 export default {
   data() {
@@ -66,7 +68,8 @@ export default {
   },
   components: {
     FlightsListHead,
-    FlightsItem
+		FlightsItem,
+		FlightsFilters
   },
   mounted() {
     this.$axios({
@@ -75,7 +78,7 @@ export default {
     }).then(res => {
 			// 总的数据,里面包含了info,flights,total,options属性
 			this.flightsData=res.data;
-			// console.log(res.data);
+			console.log(res.data);
 			// 将后台返回的总页数结果赋值给data命名的total中
 			this.total = this.flightsData.total
     })
