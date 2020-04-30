@@ -4,7 +4,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <FlightsFilters :data="flightsData" @getData="getData"/>
+        <FlightsFilters :data="flightsDataCache" @getData="getData"/>
 
         <!-- 航班头部布局 -->
         <FlightsListHead />
@@ -60,6 +60,12 @@ export default {
 				// 声明flights是空数组
 				flights:[],
 			},
+			// 备份一个数据,这个数据一旦赋值就永远不会被修改
+			flightsDataCache:{
+				info:{},
+				options:{},
+				flights:[],
+			},
 			// 这个属性专门用来存放切割出来的数组
 			// dataList:[],
 			// 当前的页数
@@ -82,6 +88,9 @@ export default {
     }).then(res => {
 			// 总的数据,里面包含了info,flights,total,options属性
 			this.flightsData=res.data;
+			// 将请求的数据备份一份起来,不会被修改
+			// 由于引用类型的内存地址一样,所以需要解构返回结果再进行赋值
+			this.flightsDataCache={...res.data};
 			console.log(res.data);
 			// 将后台返回的总页数结果赋值给data命名的total中
 			this.total = this.flightsData.total
