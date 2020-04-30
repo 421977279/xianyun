@@ -4,7 +4,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <FlightsFilters :data="flightsData"/>
+        <FlightsFilters :data="flightsData" @getData="getData"/>
 
         <!-- 航班头部布局 -->
         <FlightsListHead />
@@ -59,8 +59,6 @@ export default {
 				options:{},
 				// 声明flights是空数组
 				flights:[],
-				// 声明机型大小
-				airSize:["大","中","小"]
 			},
 			// 这个属性专门用来存放切割出来的数组
 			// dataList:[],
@@ -101,6 +99,10 @@ export default {
 		}
 	},
 	methods: {
+		// 这个事件是传递给过滤的子组件用于获取过滤后的数组
+		getData(arr){
+			this.flightsData.flights = arr;
+		},
 		// 切换单页条数时触发的事件
 		handleSizeChange(val){
 				// console.log(`每页 ${val} 条`);

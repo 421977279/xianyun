@@ -1,9 +1,8 @@
 // 存放仓库该分类（user）下的数据
 // export const state ={}是固定写法
 export const state = {
-	// 采用接口返回的数据结构
-  userInfo: {
-	}
+  // 采用接口返回的数据结构
+  userInfo: {}
 }
 
 // 同步修改state中的数据
@@ -35,49 +34,55 @@ export const actions = {
       method: "POST",
       data
     }).then(res => {
-			// console.log(res);
-      const {data} = res;
+      // console.log(res);
+      const {
+        data
+      } = res;
       // console.log(data);
 
       // 通过store.commit调用mutations的方法，调用才存储数据
       // 由于是在同一个模块下，可以省略user模块名
       store.commit("setUserInfo", data);
     })
-	},
-	
-	// 发送手机验证码
-	sendCaptcha(store,tel){
-		// 请求验证码接口
-		return this.$axios({
-			url: "/captchas",
-			method: "POST",
-			data: {
-				// 手机号码
-				tel
-			}
-		}).then(res=>{
-			// 接口主要调用成功了,都认为短信已经成功发送到用户手机上
-			const {code}=res.data;
-			// console.log(data);
-			return code;
-			// this.$message.success(`你的验证码为:`+code)
-		})
-	},
+  },
 
-	// 注册,注册接口调用成功后和登录的操作一样
-	register(store,data){
-		return this.$axios({
-			url:"/accounts/register",
-			method:"POST",
-			data
-		}).then(res=>{
-			const {data} = res;
+  // 发送手机验证码
+  sendCaptcha(store, tel) {
+    // 请求验证码接口
+    return this.$axios({
+      url: "/captchas",
+      method: "POST",
+      data: {
+        // 手机号码
+        tel
+      }
+    }).then(res => {
+      // 接口主要调用成功了,都认为短信已经成功发送到用户手机上
+      const {
+        code
+      } = res.data;
+      // console.log(data);
+      return code;
+      // this.$message.success(`你的验证码为:`+code)
+    })
+  },
+
+  // 注册,注册接口调用成功后和登录的操作一样
+  register(store, data) {
+    return this.$axios({
+      url: "/accounts/register",
+      method: "POST",
+      data
+    }).then(res => {
+      const {
+        data
+      } = res;
 
       // 通过store.commit调用mutations的方法，调用才存储数据
       // 由于是在同一个模块下，可以省略user模块名
-			store.commit("setUserInfo", data);
-			
-			return data;
-		})
-	}
+      store.commit("setUserInfo", data);
+
+      return data;
+    })
+  }
 }

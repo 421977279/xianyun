@@ -91,7 +91,12 @@ export default {
 
     // 选择航空公司时候触发
     handleCompany(value) {
-			console.log(value);
+			// console.log(value);
+			const arr = this.data.flights.filter(v =>{
+				return v.airline_name===this.company
+			})
+			// 触发父组件传递的事件,主要功能是把航班数组传递回给父组件
+			this.$emit("getData",arr);
 		},
 
     // 选择机型时候触发
